@@ -26,4 +26,8 @@ public class ApplicationModel {
 		
 		buildings = model.buildings;
 	}
+
+	public void addBuilding(Building building) {
+
+	}
 }
