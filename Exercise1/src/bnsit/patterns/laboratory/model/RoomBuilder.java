@@ -3,10 +3,10 @@ package bnsit.patterns.laboratory.model;
 public class RoomBuilder {
 
     ElevationBuilder addElevation(int numberElevation){
-        System.out.println();
+        return new ElevationBuilder();
     }
     RoomBuilder addRoom (int room){
-        System.out.println();
+        return new RoomBuilder();
     }
 
 }

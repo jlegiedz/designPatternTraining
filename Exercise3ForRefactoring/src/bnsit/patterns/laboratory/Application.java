@@ -2,22 +2,25 @@
 package bnsit.patterns.laboratory;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
-import bnsit.patterns.laboratory.logic.BuildingBuilder;
-import bnsit.patterns.laboratory.logic.BuildingsReportGenerator;
-import bnsit.patterns.laboratory.logic.DashedBuildingsReportGenerator;
-import bnsit.patterns.laboratory.logic.HelpSystemManager;
-import bnsit.patterns.laboratory.logic.IndentedBuidingsReportGenerator;
-import bnsit.patterns.laboratory.logic.TreeBuildingsReportGenerator;
+import bnsit.patterns.laboratory.logic.*;
 import bnsit.patterns.laboratory.model.ApplicationModel;
 import bnsit.patterns.laboratory.model.Building;
 
-public class Application {
+public class Application implements Exitable {
 
 	private static final String HELLO_MESSAGE = "Welcome to Equipment Evidence System.";
+
+
+	Map<String, Command> commands= new HashMap<String, Command>();
+
+	public Application() {
+		commands.put("save", new SaveCommand(model));
+		commands.put("exit",new ExitCommad(this));
+		commands.put("help",new HelpCommand());
+		commands.put("external", new DefaultExternal());		//adapter
+	}
 
 	private boolean running = false;
 
@@ -34,39 +37,17 @@ public class Application {
 
 		while ( running ) {
 			System.out.print( "ees> " );
-			String command = scanner.nextLine();
+			String userInput = scanner.nextLine();
+			String [] commandAndParam=userInput.split(" ");
+			String commandName = userInput.split( " " )[0];
+			String param="";
+			if(commandAndParam.length>1) {
+				param = userInput.split(" ")[1];
+				commands.get(param).printHelpMessage();
 
-			if ( command.equals( "hello" ) ) {
-				System.out.println( HELLO_MESSAGE );
-			} else if ( command.equals( "add_building" ) ) {
-				addBuilding( scanner );
-			} else if ( command.startsWith( "save" ) ) {
-				String filename = command.split( " " )[1];
-				try {
-					model.save( filename );
-				} catch ( IOException e ) {
-					System.out.println( "Model saving failure." );
-				}
-			} else if ( command.startsWith( "load" ) ) {
-				String filename = command.split( " " )[1];
-				try {
-					model.load( filename );
-				} catch ( IOException e ) {
-					System.out.println( "Model loading failure." );
-				}
-			} else if ( command.startsWith( "building_report" ) ) {
-				String reportType = command.split( " " )[1];
-				printReport( reportType );
-			} else if ( command.startsWith( "help" ) ) {
-				String[] commandAndParam = command.split( " " );
-				if ( commandAndParam.length == 1 ) {
-					helpSystemManager.printAllHelp();
-				} else {
-					helpSystemManager.printHelp( commandAndParam[1] );
-				}
-			} else if ( command.equals( "exit" ) ) {
-				running = false;
 			}
+			commands.get(commandName).execute(param);
+
 		}
 	}
 
@@ -127,6 +108,7 @@ public class Application {
 		System.out.println( report );
 	}
 
+	@Override
 	public void stop() {
 		running = false;
 	}

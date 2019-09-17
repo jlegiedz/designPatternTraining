@@ -1,33 +1,28 @@
 package bnsit.patterns.laboratory.model;
 
+import bnsit.patterns.laboratory.model.Room;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Elevation {
 
 	private int number;
-	private List<Room> rooms = new ArrayList<Room>();
+	private List<Room> rooms = new ArrayList<>();
 
-	public Elevation(int i) {
-	}
-
-
-	public int getNumber() {
-		return number;
-	}
-
-	public void setNumber(int number) {
+	public Elevation(int number) {
 		this.number = number;
 	}
 
-	public List<Room> getRooms() {
-		return rooms;
-	}
-
-	public void setRooms(List<Room> rooms) {
-		this.rooms = rooms;
-	}
-
 	public void addRoom(Room room) {
+		this.rooms.add(room);
+	}
+
+	public void addRoom(int roomNumber) {
+		this.rooms.add(new Room(roomNumber));
+	}
+
+	public int getNumber() {
+		return number;
 	}
 }

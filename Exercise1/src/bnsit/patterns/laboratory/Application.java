@@ -44,8 +44,8 @@ public class Application {
 
 				System.out.println("Podaj address");
 				String address = scanner.nextLine();
-				BuildingCreator creator = new BuildingCreator();
-				creator.initialize(name, address);
+				BasicBuildingCreator creator = new BasicBuildingCreator();
+				 creator.initialize(name, address);
 
 				System.out.println("Podaj zakres pięter");
 				String elevationRangeInput = scanner.nextLine();
@@ -65,7 +65,14 @@ public class Application {
 
 				}
 
-				creator.build();
+				Building b = creator.build();
+				System.out.println(b);
+			}
+			else if(command.equals("fake")){
+				AbstractBuilder creator =  new FakeBuildingCreator();
+				Building building=creator.build();
+
+				System.out.println(building);
 			}
 //			else if (command.equals("add_building2")) {
 //				BuildingCreator buildingCreator = new BuildingCreator();
